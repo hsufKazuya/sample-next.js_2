@@ -1,11 +1,14 @@
+
+"use client";{/*コンポーネントを使う定義*/}
 import { useState } from "react";
 
 export default function Home() {
-  const [email, setEmail] = useState<string>('');
-  const [password, setPassword] = useState<string>('');
+  {/*認証検査*/ }
+  const [email, setEmail] = useState<string>('');{/*初期値を0にする*/ }
+  const [password, setPassword] = useState<string>('');{/*初期値を0にする*/ }
 
   const signup =(event: React.FormEvent) =>{
-    event.preventDefault();
+    event.preventDefault();{/*リロードを防いでくれる*/ }
       console.log('email :', email);
       console.log('password :', password);
   };
