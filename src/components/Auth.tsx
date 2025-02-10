@@ -16,7 +16,7 @@ export default function LoginPage() {
     try {
       await signInWithEmailAndPassword(auth, email, password);
       alert("ログイン成功");
-    } catch (error) {
+    } catch (_error) {  // 🔹 `_error` に変更
       setError("認証に失敗しました");
     }
   };
@@ -28,7 +28,7 @@ export default function LoginPage() {
     try {
       await createUserWithEmailAndPassword(auth, email, password);
       alert("登録成功！");
-    } catch (error) {
+    } catch (_error) {  // 🔹 `_error` に変更
       setError("登録に失敗しました");
     }
   };
@@ -38,26 +38,30 @@ export default function LoginPage() {
       <div className="bg-white p-6 rounded shadow-md w-full max-w-sm">
         <h2 className="text-2xl font-bold mb-4">ログイン / 登録</h2>
         {errorM && <p className="text-red-500">{errorM}</p>}
-        <input
-          type="email"
-          placeholder="メールアドレス"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          className="w-full p-2 border rounded mb-2"
-        />
-        <input
-          type="password"
-          placeholder="パスワード"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          className="w-full p-2 border rounded mb-4"
-        />
-        <div className="w-full bg-blue-500 text-white p-2 rounded mb-2">
-            <button type="submit">ログイン</button>
-        </div>
-        <div className="w-full bg-gray-500 text-white p-2 rounded">
-        <button type="submit">新規登録</button>
-        </div>
+
+        {/* 🔹 handleLogin を適用 */}
+        <form onSubmit={handleLogin} className="mb-4">
+          <input
+            type="email"
+            placeholder="メールアドレス"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            className="w-full p-2 border rounded mb-2"
+          />
+          <input
+            type="password"
+            placeholder="パスワード"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            className="w-full p-2 border rounded mb-4"
+          />
+          <button type="submit" className="w-full bg-blue-500 text-white p-2 rounded">ログイン</button>
+        </form>
+
+        {/* 🔹 handleRegister を適用 */}
+        <form onSubmit={handleRegister}>
+          <button type="submit" className="w-full bg-gray-500 text-white p-2 rounded">新規登録</button>
+        </form>
       </div>
     </div>
   );
