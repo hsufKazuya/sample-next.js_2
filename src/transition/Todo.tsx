@@ -61,7 +61,7 @@ export default function TodoList (){
             {todo.text} 
             <button
               onClick={() => removeTodo(todo.id)}
-              className="px-2 py-1 text-white bg-red-500 rounded-md hover:bg-red-600"
+              className="px-2 py-1 text-black bg-red-500 rounded-md hover:bg-red-600"
             >
               削除
             </button>
