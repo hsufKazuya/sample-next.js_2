@@ -19,7 +19,7 @@ export default function TodoList (){
     });
 
     return () => unsubscribe();
-  }, []);
+  }, [db]);
 
   // ToDoリスト追加
   const addTodo = async () => {
