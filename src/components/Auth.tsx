@@ -16,7 +16,7 @@ export default function LoginPage() {
     try {
       await signInWithEmailAndPassword(auth, email, password);
       alert("ログイン成功");
-    } catch (error) {  // 🔹 `_error` に変更
+    } catch (_) {  // 🔹 `_error` に変更
       setError("認証に失敗しました");
     }
   };
@@ -28,7 +28,7 @@ export default function LoginPage() {
     try {
       await createUserWithEmailAndPassword(auth, email, password);
       alert("登録成功！");
-    } catch (error) {  // 🔹 `_error` に変更
+    } catch (_) {  // 🔹 `_error` に変更
       setError("登録に失敗しました");
     }
   };
