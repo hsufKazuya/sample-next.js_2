@@ -1,4 +1,3 @@
-//このtsxはTodoリストの追加、削除機能を記述する予定
 "use client";
 import { useEffect, useState } from "react";
 import { getFirestore, collection, addDoc, deleteDoc, doc, onSnapshot } from "firebase/firestore";
@@ -7,19 +6,20 @@ export interface TodoTask {
   id: string;
   text: string;
 }
-export default function TodoList (){
-    const [todos, setTodos] = useState<TodoTask[]>([]);
-    const [newTodo, setNewTodo] = useState("");
-    const db = getFirestore();
 
-  //ここでFirestore のリアルタイム更新
+export default function TodoList() {
+  const [todos, setTodos] = useState<TodoTask[]>([]);
+  const [newTodo, setNewTodo] = useState("");
+  const db = getFirestore();
+
+  // Firestore のリアルタイム更新
   useEffect(() => {
     const unsubscribe = onSnapshot(collection(db, "todos"), (snapshot) => {
       setTodos(snapshot.docs.map((doc) => ({ id: doc.id, text: doc.data().text })));
     });
 
     return () => unsubscribe();
-  }, [db]);
+  }, []);
 
   // ToDoリスト追加
   const addTodo = async () => {
@@ -33,41 +33,65 @@ export default function TodoList (){
     }
   };
 
-  //ToDoリスト削除
+  // ToDoリスト削除
   const removeTodo = async (id: string) => {
     await deleteDoc(doc(db, "todos", id));
     setTodos(todos.filter((todo) => todo.id !== id));
   };
 
   return (
-    <div className="w-full max-w-md p-6 bg-white rounded-md shadow-md">
-      <h2 className="text-lg font-semibold mb-4">ToDo リスト</h2>
-      <input
-        type="text"
-        placeholder="ToDo を入力"
-        value={newTodo}
-        onChange={(e) => setNewTodo(e.target.value)}
-        className="w-full p-2 mb-4 border rounded-md focus:outline-none focus:ring focus:ring-blue-300 text-black"
-      />
-      <button
-        onClick={addTodo}
-        className="w-full px-4 py-2 mb-4 text-white bg-blue-500 rounded-md hover:bg-blue-600"
-      >
-        追加
-      </button>
-      <ul className="w-full mt-4">
-        {todos.map((todo) => (
-          <li key={todo.id} className="flex justify-between p-2 bg-gray-100 rounded-md mb-2">
-            {todo.text} 
-            <button
-              onClick={() => removeTodo(todo.id)}
-              className="px-2 py-1 text-black bg-red-500 rounded-md hover:bg-red-600"
-            >
-              削除
-            </button>
-          </li>
-        ))}
-      </ul>
+    <div className="min-h-screen bg-blue-100 flex flex-col items-center">
+      {/* ヘッダー */}
+      <div className="w-full bg-white p-4 shadow-md flex justify-between items-center">
+        <h1 className="text-2xl font-bold flex items-center">
+          <span className="mr-2">🦭</span> とど管理
+        </h1>
+        <button className="bg-gray-500 text-white px-4 py-2 rounded">Logout</button>
+      </div>
+
+      {/* ToDo入力フォーム */}
+      <div className="mt-10 p-6 bg-gray-100 rounded-lg shadow-lg w-2/3 max-w-md">
+        <input
+          type="text"
+          placeholder="タスクを入力"
+          value={newTodo}
+          onChange={(e) => setNewTodo(e.target.value)}
+          className="w-full p-2 border rounded-md focus:outline-none focus:ring focus:ring-blue-300 text-black"
+        />
+        <div className="flex justify-end mt-4">
+          <button
+            onClick={addTodo}
+            className="bg-gray-400 text-white px-4 py-2 rounded"
+          >
+            追加
+          </button>
+        </div>
+      </div>
+
+      {/* ToDoリスト */}
+      <div className="mt-6 p-6 bg-gray-100 rounded-lg shadow-lg w-2/3 max-w-md">
+        <ul className="w-full">
+          {todos.map((todo) => (
+            <li key={todo.id} className="flex justify-between p-2 bg-white rounded-md mb-2">
+              {todo.text}
+            </li>
+          ))}
+        </ul>
+        <div className="flex justify-center mt-4">
+          <button
+            onClick={() => setTodos([])}
+            className="bg-gray-500 text-white px-4 py-2 rounded"
+          >
+            削除
+          </button>
+        </div>
+      </div>
+
+      {/* フッター */}
+      <footer className="mt-10 text-center">
+        <h2 className="text-xl font-bold">とど管理</h2>
+        <p className="text-gray-600">今日のやるべきことを確認しよう！</p>
+      </footer>
     </div>
   );
-};
+}
